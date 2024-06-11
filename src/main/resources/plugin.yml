@@ -1,0 +1,10 @@
+name: GuildProject
+version: '${project.version}'
+main: com.j43hyun9.guildproject.GuildProject
+api-version: '1.20'
+commands:
+  길드:
+    description: "길드 명령어"
+  파일:
+    description: "길드 명령어"
+
