@@ -1,5 +1,6 @@
 package com.j43hyun9.guildproject.command;
 
+import com.j43hyun9.guildproject.GuildProject;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,19 +10,19 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class MeesageListener implements CommandExecutor {
 
-    public MeesageListener(Plugin plugin) {
+    GuildProject plugin;
+
+    public MeesageListener(GuildProject plugin) {
         this.plugin = plugin;
     }
-    Plugin plugin;
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
@@ -42,25 +43,29 @@ public class MeesageListener implements CommandExecutor {
             Bukkit.broadcastMessage("§c→ §f길드명을 입력해주시길 바랍니다.");
         } else if(args.length == 2 && args[0].equals("생성")) {
             Map<String, Object> data1 = new HashMap<>();
-            data1.put("name", p.getUniqueId());
+            data1.put("name", p.getUniqueId().toString());
             Yaml yaml = new Yaml();
+            FileWriter writer = null;
             try {
-                FileWriter writer = new FileWriter("C:\\Users\\noble\\OneDrive\\바탕 화면\\TestServer\\plugins\\GuildProject\\"+args[1]);
-                yaml.dump(data1, writer);
-                Bukkit.broadcastMessage("§c→ §f길드가 생성되었습니다.ㄴ" + "§c" + args[1]);
+                writer = new FileWriter(plugin.getDataFolder()+ "\\" +args[1]+".yml");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            yaml.dump(data1, writer);
+            Bukkit.broadcastMessage("§c→ §f길드가 생성되었습니다." + "§c" + args[1]);
+
         } else if(args.length == 1 && args[0].equals("해체")) {
             Bukkit.broadcastMessage("§c→ §f길드명을 입력해주시길 바랍니다.");
         } else if(args.length == 2 && args[0].equals("해체")) {
             //if(p.getName().equals())  플레이어 명과 file 네임 명이 일치하는지 확인해야함.
-            Yaml yaml = new Yaml();
-            InputStream inputStream = plugin.getClass()
-                    .getClassLoader()
-                    .getResourceAsStream("C:\\Users\\noble\\OneDrive\\바탕 화면\\TestServer\\plugins\\GuildProject\\"+args[1]);
-            Map<String, UUID> obj = yaml.load(inputStream);
-            Bukkit.broadcastMessage(obj.toString());
+            try {
+                Reader yamlFile = new FileReader(plugin.getDataFolder() + "\\" +args[1]+".yml");
+                Yaml yaml = new Yaml();
+                Map<String, UUID> obj = yaml.load(yamlFile);
+                Bukkit.broadcastMessage(String.valueOf(obj.get("name")));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
         }
 
