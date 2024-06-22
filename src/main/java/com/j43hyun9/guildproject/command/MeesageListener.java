@@ -46,24 +46,42 @@ public class MeesageListener implements CommandExecutor {
             data1.put("name", p.getUniqueId().toString());
             Yaml yaml = new Yaml();
             FileWriter writer = null;
+            p.setPlayerListName(p.getName() + " §a" + args[1] + "§2길드");
             try {
                 writer = new FileWriter(plugin.getDataFolder()+ "\\" +args[1]+".yml");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             yaml.dump(data1, writer);
-            Bukkit.broadcastMessage("§c→ §f길드가 생성되었습니다." + "§c" + args[1]);
+            try {
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Bukkit.broadcastMessage("§c→ §f길드가 생성되었습니다." + "§c " + args[1]);
 
         } else if(args.length == 1 && args[0].equals("해체")) {
             Bukkit.broadcastMessage("§c→ §f길드명을 입력해주시길 바랍니다.");
         } else if(args.length == 2 && args[0].equals("해체")) {
-            //if(p.getName().equals())  플레이어 명과 file 네임 명이 일치하는지 확인해야함.
             try {
                 Reader yamlFile = new FileReader(plugin.getDataFolder() + "\\" +args[1]+".yml");
                 Yaml yaml = new Yaml();
-                Map<String, UUID> obj = yaml.load(yamlFile);
-                Bukkit.broadcastMessage(String.valueOf(obj.get("name")));
+                Map<String, Object> obj = yaml.load(yamlFile);
+                //Bukkit.broadcastMessage(String.valueOf(obj.get("name").equals(p.getUniqueId().toString())));
+                if(String.valueOf(obj.get("name")).equals(p.getUniqueId().toString())) {
+                    File file = new File(plugin.getDataFolder() + "\\" + args[1]+".yml");
+                    obj.remove("name");
+                    obj.put("name", "X");
+                    FileWriter writer = new FileWriter(plugin.getDataFolder() + "\\" + args[1] + ".yml");
+                    yaml.dump(obj, writer);
+                    p.setPlayerListName(p.getName());
+                    Bukkit.broadcastMessage("§c→ §f길드가 해체되었습니다. §c" + args[1]);
+                } else {
+                    p.sendMessage("§c 접근 권한이 없습니다.");
+                }
             } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
