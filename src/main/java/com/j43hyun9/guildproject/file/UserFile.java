@@ -1,9 +1,12 @@
 package com.j43hyun9.guildproject.file;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserFile {
 
@@ -11,12 +14,14 @@ public class UserFile {
     File file;
     File userfile;
     File guildfile;
+    private Map<Player, Map> playerYamlMap;
 
     public UserFile(Plugin plugin) {
         this.plugin = plugin;
         file = plugin.getDataFolder();
         userfile = new File(plugin.getDataFolder() +"\\"+"userfile");
         guildfile = new File(plugin.getDataFolder() +"\\"+"guildfile");
+        playerYamlMap = new HashMap<>();
     }
 
     public void createDirectory() {
@@ -69,5 +74,9 @@ public class UserFile {
         } else {
             return file;
         }
+    }
+
+    public Map<Player, Map> getPlayerYamlMap() {
+        return playerYamlMap;
     }
 }

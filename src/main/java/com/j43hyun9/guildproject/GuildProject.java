@@ -17,7 +17,7 @@ public final class GuildProject extends JavaPlugin implements Listener {
 
     private File customConfigFile;
     private FileConfiguration customConfig;
-    private UserFile filedir = new UserFile(this);;
+    private UserFile filedir = new UserFile(this);
 
     @Override
     public void onEnable() {

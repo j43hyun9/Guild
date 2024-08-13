@@ -24,12 +24,10 @@ public class PlayerJoinEvent implements Listener {
 
     Plugin plugin;
     UserFile userfile;
-    Map<Player, Map> playerYamlMap;
 
     public PlayerJoinEvent(Plugin plugin, UserFile userfile) {
         this.plugin = plugin;
         this.userfile = userfile;
-        playerYamlMap = new HashMap<>();
     }
 
     @EventHandler
@@ -37,6 +35,7 @@ public class PlayerJoinEvent implements Listener {
         Player player = event.getPlayer();
         String player_uuid = player.getUniqueId().toString();
         File userfolder = userfile.getFile("userfile");
+
         File userfile = new File(userfolder.toString() + "\\" + player_uuid + ".yaml");
 
         if(userfile.exists()) {
@@ -57,14 +56,21 @@ public class PlayerJoinEvent implements Listener {
             data.put("name", player.getName());
             data.put("guild", "none");
 
+
             // YAML 파일에 데이터 작성
             try (FileWriter writer = new FileWriter(userfile)) {
 //                yaml.dump(data, writer);
-                playerYamlMap.put(player, data);
+                this.userfile.getPlayerYamlMap()
+                userfile.playeryaml.put(player, data);
+
                 System.out.println("YAML 파일이 성공적으로 생성되었습니다.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    PlayerJoinEvent getPlayerJoinEvent() {}
+
+
 }

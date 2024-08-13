@@ -36,6 +36,8 @@ public class SaveUserFile extends SaveYamlNormal{
                         for (Map.Entry<Player, Map> entry : playerYamlHashMap.entrySet()) {
                             Player player = entry.getKey();
                             Map map = entry.getValue();
+
+
                             // 저장 로직을 여기에 추가
 
                             System.out.println("Saving YAML for player: " + player.getName());
