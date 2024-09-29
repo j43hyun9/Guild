@@ -11,9 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +33,22 @@ public class PlayerJoinEvent implements Listener {
         Player player = event.getPlayer();
         String player_uuid = player.getUniqueId().toString();
         File userfolder = userfile.getFile("userfile");
-
-        File userfile = new File(userfolder.toString() + "\\" + player_uuid + ".yaml");
+        File userfile = new File(userfolder.toString() + "\\" + player_uuid + ".yml");
 
         if(userfile.exists()) {
             for(int i=0; i<5; i++) player.sendMessage(" ");
             player.sendMessage("§b<System> §e" + player.getName() + "님 재방문을 환영합니다.§f");
+            Yaml yaml = new Yaml();
+            try {
+                Map<String, Object> data = yaml.load(new FileInputStream(userfile));
+                Boolean hasGuild = (Boolean) data.get("hasGuild");
+                if(hasGuild) {
+                    player.setPlayerListName(player.getName() + " §a" + data.get("guildName") + "§2길드");
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
             for(int i=0; i<5; i++) player.sendMessage(" ");
         } else {
             for(int i=0; i<5; i++) player.sendMessage(" ");
@@ -60,8 +68,7 @@ public class PlayerJoinEvent implements Listener {
             // YAML 파일에 데이터 작성
             try (FileWriter writer = new FileWriter(userfile)) {
 //                yaml.dump(data, writer);
-                this.userfile.getPlayerYamlMap()
-                userfile.playeryaml.put(player, data);
+                this.userfile.getPlayerYamlMap().put(player, data);
 
                 System.out.println("YAML 파일이 성공적으로 생성되었습니다.");
             } catch (IOException e) {
@@ -69,8 +76,6 @@ public class PlayerJoinEvent implements Listener {
             }
         }
     }
-
-    PlayerJoinEvent getPlayerJoinEvent() {}
 
 
 }
