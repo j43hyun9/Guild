@@ -12,9 +12,9 @@ public class UserFile {
 
     Plugin plugin;
     File file;
-    File userfile;
-    File guildfile;
-    private Map<Player, Map> playerYamlMap;
+    static public File userfile;
+    static public File guildfile;
+    static private Map<Player, Map> playerYamlMap;
 
     public UserFile(Plugin plugin) {
         this.plugin = plugin;
@@ -76,7 +76,7 @@ public class UserFile {
         }
     }
 
-    public Map<Player, Map> getPlayerYamlMap() {
+    public Map<Player, Map> getPlayerData() {
         return playerYamlMap;
     }
 }

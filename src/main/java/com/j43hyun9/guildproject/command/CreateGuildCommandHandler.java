@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 public class CreateGuildCommandHandler extends GuildCommand implements  GuildCommandHandler, Supplier<GuildCommandHandler> {
 
     Map<String, Object> guild = new HashMap<>();
+    Map<String, Object> guild_data = new HashMap<>();
     Plugin plugin;
     public CreateGuildCommandHandler(Plugin plugin) {
         super("생성");
@@ -37,6 +38,7 @@ public class CreateGuildCommandHandler extends GuildCommand implements  GuildCom
             guild.put("hasGuild", true);
             guild.put("userName", player.getName());
             guild.put("guildName", args[1]);
+            guild_data.put("guild_Master", player.getName());
             DumperOptions options = new DumperOptions();
             options.setIndent(4); // YAML 파일의 들여쓰기를 4로 설정
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 블록 스타일 사용
@@ -46,6 +48,8 @@ public class CreateGuildCommandHandler extends GuildCommand implements  GuildCom
             try {
                 FileWriter writer = new FileWriter(plugin.getDataFolder() + "\\userfile\\" + player.getUniqueId().toString() + ".yml");
                 yaml.dump(guild, writer);
+                writer = new FileWriter(plugin.getDataFolder() + "\\guildfile\\" + args[1] + ".yml");
+                yaml.dump(guild_data, writer);
                 writer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);

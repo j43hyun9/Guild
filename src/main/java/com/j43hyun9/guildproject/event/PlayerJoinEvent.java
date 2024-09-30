@@ -34,11 +34,15 @@ public class PlayerJoinEvent implements Listener {
         String player_uuid = player.getUniqueId().toString();
         File userfolder = userfile.getFile("userfile");
         File userfile = new File(userfolder.toString() + "\\" + player_uuid + ".yml");
+        DumperOptions options = new DumperOptions();
+        options.setIndent(4); // YAML 파일의 들여쓰기를 4로 설정
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 블록 스타일
+        Yaml yaml = new Yaml(options);
 
         if(userfile.exists()) {
             for(int i=0; i<5; i++) player.sendMessage(" ");
             player.sendMessage("§b<System> §e" + player.getName() + "님 재방문을 환영합니다.§f");
-            Yaml yaml = new Yaml();
+
             try {
                 Map<String, Object> data = yaml.load(new FileInputStream(userfile));
                 Boolean hasGuild = (Boolean) data.get("hasGuild");
@@ -54,26 +58,23 @@ public class PlayerJoinEvent implements Listener {
             for(int i=0; i<5; i++) player.sendMessage(" ");
             player.sendMessage("§b<System> §e" + player.getName() + "님 첫방문을 환영합니다.§f");
             for(int i=0; i<5; i++) player.sendMessage(" ");
-            /*DumperOptions options = new DumperOptions();
-            options.setIndent(4); // YAML 파일의 들여쓰기를 4로 설정
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 블록 스타일 사용
 
-            Yaml yaml = new Yaml(options);*/
+
             // YAML에 쓸 데이터 생성
             Map<String, Object> data = new HashMap<>();
-            data.put("name", player.getName());
-            data.put("guild", "none");
-
-
-            // YAML 파일에 데이터 작성
+            data.put("hasGuild", false);
+            data.put("userName", player.getName());
             try (FileWriter writer = new FileWriter(userfile)) {
-//                yaml.dump(data, writer);
-                this.userfile.getPlayerYamlMap().put(player, data);
+                yaml.dump(data, writer);
+                this.userfile.getPlayerData().put(player, data);
 
                 System.out.println("YAML 파일이 성공적으로 생성되었습니다.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            // YAML 파일에 데이터 작성
+
         }
     }
 
