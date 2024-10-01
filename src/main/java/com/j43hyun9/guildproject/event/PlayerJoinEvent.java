@@ -42,12 +42,16 @@ public class PlayerJoinEvent implements Listener {
         if(userfile.exists()) {
             for(int i=0; i<5; i++) player.sendMessage(" ");
             player.sendMessage("§b<System> §e" + player.getName() + "님 재방문을 환영합니다.§f");
-
             try {
                 Map<String, Object> data = yaml.load(new FileInputStream(userfile));
-                Boolean hasGuild = (Boolean) data.get("hasGuild");
+                UserFile.getUserfileMap().put(player, data);
+                boolean hasGuild = (boolean) data.get("hasGuild");
                 if(hasGuild) {
+                    Map<String, Object> guild_data = yaml.load(new FileInputStream(UserFile.guildfile + "\\" + data.get("guildName") + ".yml"));
                     player.setPlayerListName(player.getName() + " §a" + data.get("guildName") + "§2길드");
+                    if(!UserFile.getGuildfileMap().containsKey(player)) {
+                        UserFile.getGuildfileMap().put(player, guild_data);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
@@ -66,7 +70,7 @@ public class PlayerJoinEvent implements Listener {
             data.put("userName", player.getName());
             try (FileWriter writer = new FileWriter(userfile)) {
                 yaml.dump(data, writer);
-                this.userfile.getPlayerData().put(player, data);
+                UserFile.getUserfileMap().put(player, data);
 
                 System.out.println("YAML 파일이 성공적으로 생성되었습니다.");
             } catch (IOException e) {

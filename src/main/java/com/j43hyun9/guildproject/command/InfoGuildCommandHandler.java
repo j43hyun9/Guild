@@ -1,6 +1,7 @@
 package com.j43hyun9.guildproject.command;
 
 import com.j43hyun9.guildproject.file.UserFile;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.Yaml;
 
@@ -33,9 +34,18 @@ public class InfoGuildCommandHandler extends GuildCommand implements GuildComman
                 player.sendMessage("§c→ §f길드명을 입력해주시길 바랍니다.");
                 player.sendMessage(" ");
             } else if (args.length == 2) {
-                player.sendMessage(" ");
-                player.sendMessage("§b→ §f길드명:  <길드장 이름>");
-                player.sendMessage("§b→ §f길드>");
+                try {
+                    guild_data = yaml.load(new FileInputStream(new File(UserFile.guildfile.toString() +"\\" + args[1] +".yml")));
+                } catch (FileNotFoundException e) {
+                    player.sendMessage("존재하지 않는 길드명입니다. ");
+                }
+                if(guild_data != null) {
+                    player.sendMessage(" ");
+                    player.sendMessage("§b→ §f길드명: "+ args[2]);
+                    player.sendMessage("§b→ §f길드장 "+ guild_data.get("guild_Master"));
+                } else {
+                    Bukkit.getConsoleSender().sendMessage("guild_data is null");
+                }
             }
         } else if (hasGuild) {
             try {
@@ -50,6 +60,20 @@ public class InfoGuildCommandHandler extends GuildCommand implements GuildComman
                 player.sendMessage("§b→ §f길드명: "+guild_Name);
                 player.sendMessage("§b→ §f길드장: "+ guild_Master);
                 player.sendMessage(" ");
+            } else if (args.length == 2) {
+                try {
+                    guild_data = yaml.load(new FileInputStream(new File(UserFile.guildfile.toString() +"\\" + args[1] +".yml")));
+                } catch (FileNotFoundException e) {
+                    player.sendMessage("존재하지 않는 길드명입니다. ");
+                    return;
+                }
+                if(guild_data != null) {
+                    player.sendMessage(" ");
+                    player.sendMessage("§b→ §f길드명: "+ args[1]);
+                    player.sendMessage("§b→ §f길드장 "+ guild_data.get("guild_Master"));
+                } else {
+                    Bukkit.getConsoleSender().sendMessage("guild_data is null");
+                }
             }
         }
     }

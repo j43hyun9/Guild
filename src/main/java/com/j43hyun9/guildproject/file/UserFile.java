@@ -14,16 +14,23 @@ public class UserFile {
     File file;
     static public File userfile;
     static public File guildfile;
-    static private Map<Player, Map> playerYamlMap;
+    static private Map<Player, Map> userfileMap;
+    static private Map<Player, Map> guildfileMap;
 
     public UserFile(Plugin plugin) {
         this.plugin = plugin;
         file = plugin.getDataFolder();
         userfile = new File(plugin.getDataFolder() +"\\"+"userfile");
         guildfile = new File(plugin.getDataFolder() +"\\"+"guildfile");
-        playerYamlMap = new HashMap<>();
+        userfileMap = new HashMap<>();
+        guildfileMap = new HashMap<>();
     }
-
+    public static Map<Player, Map> getUserfileMap() {
+        return userfileMap;
+    }
+    public static Map<Player, Map> getGuildfileMap() {
+        return guildfileMap;
+    }
     public void createDirectory() {
 
         if(file.exists()) {
@@ -76,7 +83,8 @@ public class UserFile {
         }
     }
 
-    public Map<Player, Map> getPlayerData() {
-        return playerYamlMap;
-    }
+
 }
+
+
+

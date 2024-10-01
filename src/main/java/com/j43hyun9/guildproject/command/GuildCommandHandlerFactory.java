@@ -2,11 +2,9 @@ package com.j43hyun9.guildproject.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.reflections.Reflections;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class GuildCommandHandlerFactory {
@@ -20,6 +18,9 @@ public class GuildCommandHandlerFactory {
         new DonateGuildCommandHandler();
         new InfoGuildCommandHandler();
         new SignUpGuildCommandHandler();
+        new RemoveGuildCommandHandler();
+        new UnSignGuildCommandHandler();
+        new RemoveGuildCommandHandler();
 
         commandHandlers = GuildCommand.getCommandHandlerList();
     }
