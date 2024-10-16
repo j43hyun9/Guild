@@ -1,6 +1,6 @@
 package com.j43hyun9.guildproject.event;
 
-import com.j43hyun9.guildproject.file.UserFile;
+import com.j43hyun9.guildproject.file.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +13,7 @@ public class PlayerQuitEvent implements Listener {
     Map<Player, Map> user_Data;
 
     public PlayerQuitEvent() {
-        user_Data = UserFile.getUserfileMap();
+        user_Data = FileManager.getUserfileMap();
     }
 
 

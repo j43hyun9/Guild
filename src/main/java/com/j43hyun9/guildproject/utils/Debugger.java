@@ -1,4 +1,4 @@
-package com.j43hyun9.guildproject.command.utils;
+package com.j43hyun9.guildproject.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
